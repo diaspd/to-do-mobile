@@ -1,34 +1,47 @@
-import { ImageBackground, Text, TouchableOpacity, View  } from 'react-native';
+import { FlatList, View, Text } from "react-native";
 
-import { styles } from './styles';
-import { Trash2 } from 'lucide-react-native';
+import { Task } from "../../screens/Home";
+import { Item } from "./Item";
 
-type TaskProps = {
-  name: string 
-  onRemove: () => void
-  onAddConcluded: any
+import { styles } from "./styles";
+
+import { Feather } from '@expo/vector-icons';
+
+type Props = {
+  data: Task[]
+  removeTask: (taskIdToBeRemoved: number) => void;
+  toggleTaskCheck: (taskIdToBeChecked: number) => void;
 }
 
-export function Todo({ name, onRemove, onAddConcluded }: TaskProps){
+export function List({ data, removeTask, toggleTaskCheck }: Props) {
   return (
-    <View style={styles.container}>
-       <TouchableOpacity 
-          style={styles.input}
-          onPress={onAddConcluded}
-        />
-
-      <ImageBackground source={require('../../../assets/check.png')} resizeMode="cover" style={styles.image}>
-        <TouchableOpacity 
-          style={styles.image}
-          onPress={onAddConcluded}
-        />
-      </ImageBackground>
-
-      <Text style={styles.name}>{name}</Text>
-
-      <TouchableOpacity style={styles.removeButton} onPress={onRemove}>
-        <Trash2 color="#808080" size={20} /> 
-      </TouchableOpacity>
+    <View>
+      <FlatList 
+        data={data}
+        renderItem={({ item }) => (
+          <Item 
+            item={item}
+            removeTask={removeTask}
+            toggleTaskCheck={toggleTaskCheck}
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyListDescription}>
+          <Feather 
+            name="clipboard" 
+            color="#333333" 
+            size={65} 
+          />
+         
+          <Text style={styles.listEmptyText}>
+            Você ainda não tem tarefas cadastradas {'\n'}
+            Crie tarefas e organize seus itens a fazer.
+          </Text>
+          </View>
+        )}
+        contentContainerStyle={{ paddingBottom: 24 }}
+      />
     </View>
-  );
+  )
 }

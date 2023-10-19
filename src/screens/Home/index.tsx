@@ -1,45 +1,74 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Text, TextInput, View, TouchableOpacity, FlatList, Alert, Image  } from 'react-native';
 
 import { styles } from './styles';
-import { Todo } from '../../components/Todo';
-import { ClipboardList, PlusCircle } from 'lucide-react-native';
+import { List } from '../../components/Todo';
+
+import { Feather } from '@expo/vector-icons';
+
+export type Task = {
+  id: number;
+  text: string;
+  isChecked: boolean;
+  toggleTaskCheck: (taskIdToBeChecked: number) => void;
+}
 
 export function Home() {
-  const [todo, setTodo] = useState<string[]>([])
-  const [taskName, setTaskName] = useState('') 
-  //const [concludedTasks, setConcludedTasks] = useState([])
-  var concludedTasks = false
+  const [newTaskValue, setNewTaskValue] = useState('');
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [isFocused, setIsFocused] = useState(false);
 
-  function handleAddTask() {
-    if (taskName === '') {
-      return
-    }
-
-    if (todo.includes(taskName)) {
-      return Alert.alert("Task já existe", "Já existe uma task na lista com esse nome.")
-    }
-    
-    setTodo(prevState => [...prevState, taskName]);
-    setTaskName('')
+  function handleFocus() {
+    setIsFocused(true);
   }
 
-  function handleAddTaskAsConcluded() {
-    concludedTasks = true
-    console.log('fds')
+  function handleBlur() {
+    setIsFocused(false);
   }
 
-  function handleRemoveTask(name: string) {
-    Alert.alert("Remover", `Gostaria de remover a task ${name}?`, [
+  const checkedDataCounter = useMemo(() => {
+    const filteredCheckedData = tasks.filter(item => item.isChecked);
+
+    return filteredCheckedData.length;
+  }, [tasks]);
+
+  function handleRemoveTask(taskIdToBeRemoved: number) {
+    Alert.alert("Remover", `Gostaria de remover essa task ?`, [
       {
         text: "Sim",
-        onPress: () => setTodo(prevState => prevState.filter(taskName => taskName !== name))
+        onPress: () => setTasks(tasks.filter(task => task.id !== taskIdToBeRemoved))
       },
       {
         text: 'Não',
         style: 'cancel'
       }
     ])
+  }
+
+  function handleToggleTaskCheck(taskIdToBeChecked: number) {
+    const immutableTasks = tasks.map(task => ({ ...task }));
+
+    const taskToBeUpdated = immutableTasks.find(task => task.id === taskIdToBeChecked);
+
+    if (taskToBeUpdated) {
+      taskToBeUpdated.isChecked = !taskToBeUpdated.isChecked;
+      setTasks(immutableTasks);
+    }
+  }
+
+  function handleAddTask() {
+    if (!newTaskValue) {
+      return;
+    }
+
+    const newTask: Task = {
+      id: Date.now(),
+      text: newTaskValue,
+      isChecked: false
+    }
+
+    setTasks(oldTasks => [...oldTasks, newTask]);
+    setNewTaskValue('')
   }
 
   return (
@@ -52,16 +81,22 @@ export function Home() {
       
       <View style={styles.form}>      
         <TextInput 
-          style={styles.input}
+          style={isFocused ? {...styles.input, ...styles.focused } : styles.input}
+          value={newTaskValue}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
           placeholder="Adicione uma nova tarefa"
           placeholderTextColor="#6b6b6b"
-          onChangeText={setTaskName}
-          value={taskName}
+          onChangeText={setNewTaskValue}
         />
 
-        <TouchableOpacity style={!taskName ? styles.buttonDisabled : styles.button} onPress={handleAddTask}>
+        <TouchableOpacity style={!newTaskValue ? styles.buttonDisabled : styles.button} onPress={handleAddTask}>
           <Text style={styles.buttonText}>
-            <PlusCircle color="white" />
+            <Feather
+              name="plus-circle" 
+              size={20} 
+              color="#F2F2F2"
+            />
           </Text>
         </TouchableOpacity>
       </View>
@@ -74,7 +109,7 @@ export function Home() {
             Criadas 
           </Text>
           <View style={styles.todoHeaderInfo}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>{todo.length}</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>{tasks.length}</Text>
           </View>
         </View>
 
@@ -83,35 +118,17 @@ export function Home() {
             Concluídas
           </Text>
           <View style={styles.todoHeaderInfo}>
-            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>{concludedTasks.length}</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>{checkedDataCounter}</Text>
           </View>
         </View>
       </View>
 
-      {todo.length == 0 && <View style={styles.separator} />}
+      {tasks.length == 0 && <View style={styles.separator} />}
 
-      <FlatList 
-        data={todo}
-        keyExtractor={item => item}
-        renderItem={({item}) => (
-          <Todo
-            key={item} 
-            name={item} 
-            onAddConcluded={handleAddTaskAsConcluded}
-            onRemove={() => handleRemoveTask(item)} 
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={() => (
-          <View style={styles.emptyListDescription}>
-          <ClipboardList color="#333333" size={65} />
-         
-          <Text style={styles.listEmptyText}>
-          Você ainda não tem tarefas cadastradas {'\n'}
-            Crie tarefas e organize seus itens a fazer.
-          </Text>
-          </View>
-        )}
+      <List
+        data={tasks}
+        removeTask={handleRemoveTask}
+        toggleTaskCheck={handleToggleTaskCheck}
       />
       </View>
     </View>

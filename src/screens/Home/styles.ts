@@ -44,6 +44,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#4EA8DE',  
   },
+  focused: {
+    borderColor: '#5E60CE',
+    borderWidth: 1
+  },
   buttonDisabled: {
     width: 56,
     height: 56,
