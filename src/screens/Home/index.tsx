@@ -10,7 +10,7 @@ export type Task = {
   id: number;
   text: string;
   isChecked: boolean;
-  toggleTaskCheck: (taskIdToBeChecked: number) => void;
+  toggleTaskCheck?: (taskIdToBeChecked: number) => void;
 }
 
 export function Home() {
