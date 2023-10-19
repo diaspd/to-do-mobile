@@ -10,8 +10,20 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    height: 70,
+    height: 60,
     paddingHorizontal: 10,
+  },
+  input: {
+    borderColor: '#4EA8DE',
+    borderWidth: 2,
+    height: 20,
+    width: 20,
+    borderRadius: 999,
+  },
+  image: {
+    height: 28,
+    width: 28,
+    justifyContent: 'center',
   },
   name: {
     flex: 1,

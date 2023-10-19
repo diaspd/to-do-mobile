@@ -6,8 +6,10 @@ import { Todo } from '../../components/Todo';
 import { ClipboardList, PlusCircle } from 'lucide-react-native';
 
 export function Home() {
-  const [todo, setTodo] = useState<string[]>([]) 
+  const [todo, setTodo] = useState<string[]>([])
   const [taskName, setTaskName] = useState('') 
+  //const [concludedTasks, setConcludedTasks] = useState([])
+  var concludedTasks = false
 
   function handleAddTask() {
     if (taskName === '') {
@@ -20,6 +22,11 @@ export function Home() {
     
     setTodo(prevState => [...prevState, taskName]);
     setTaskName('')
+  }
+
+  function handleAddTaskAsConcluded() {
+    concludedTasks = true
+    console.log('fds')
   }
 
   function handleRemoveTask(name: string) {
@@ -62,22 +69,26 @@ export function Home() {
 
     <View style={styles.todoContainer}>
       <View style={styles.todoHeader}>
-        <Text style={styles.todoHeaderTextCreated}>
-          Criadas 
+        <View style={styles.todoContent}>
+          <Text style={styles.todoHeaderTextCreated}>
+            Criadas 
+          </Text>
           <View style={styles.todoHeaderInfo}>
-            <Text style={{color: 'white'}}>{todo.length}</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>{todo.length}</Text>
           </View>
-        </Text>
+        </View>
 
-        <Text style={styles.todoHeaderTextConcluded}>
-          Concluídas
+        <View style={styles.todoContent}>
+          <Text style={styles.todoHeaderTextConcluded}>
+            Concluídas
+          </Text>
           <View style={styles.todoHeaderInfo}>
-            <Text style={{color: 'white'}}>{todo.length}</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>{concludedTasks.length}</Text>
           </View>
-        </Text>
+        </View>
       </View>
 
-      <View style={styles.separator} />
+      {todo.length == 0 && <View style={styles.separator} />}
 
       <FlatList 
         data={todo}
@@ -86,6 +97,7 @@ export function Home() {
           <Todo
             key={item} 
             name={item} 
+            onAddConcluded={handleAddTaskAsConcluded}
             onRemove={() => handleRemoveTask(item)} 
           />
         )}
