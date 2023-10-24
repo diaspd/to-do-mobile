@@ -1,5 +1,5 @@
 <h1 align="center">
-   To-do
+   <img alt="project img" title="project img" src="./assets/logo.png" width="12%" />
 </h1> 
 
 <div align="center">
@@ -21,8 +21,6 @@
 ## 🚀 Getting started
 
 Clone the project and access the folder.
-
-### Web
 
 ```bash
 $ git clone 
