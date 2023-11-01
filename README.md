@@ -1,5 +1,5 @@
 <h1 align="center">
-   <img alt="project img" title="project img" src="./assets/logo.png" width="12%" />
+   <img alt="project img" title="project img" src="./assets/logo.png" width="135rem" />
 </h1> 
 
 <div align="center">
