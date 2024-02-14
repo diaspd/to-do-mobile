@@ -16,6 +16,10 @@
   <img alt="project img" title="project img" src="./assets/template.svg" width="100%" />
 </div> 
 
+<div align="center">
+  <img alt="project img" title="project gif" src="./assets/template.gif" width="100%" />
+</div>
+
 </br>
 
 ## 🚀 Getting started
