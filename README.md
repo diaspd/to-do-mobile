@@ -14,7 +14,7 @@
 
 <div align="center">
   <img alt="project img" title="project img" src="./assets/template.svg" width="75%" />
-  <img alt="project img" title="project gif" src="./assets/template.gif" width="21%" />
+  <img alt="project gif" title="project gif" src="./assets/template.gif" width="21%" />
 </div> 
 
 </br>
