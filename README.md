@@ -13,12 +13,9 @@
 ---
 
 <div align="center">
-  <img alt="project img" title="project img" src="./assets/template.svg" width="100%" />
+  <img alt="project img" title="project img" src="./assets/template.svg" width="75%" />
+  <img alt="project img" title="project gif" src="./assets/template.gif" width="21%" />
 </div> 
-
-<div align="center">
-  <img alt="project img" title="project gif" src="./assets/template.gif" width="100%" />
-</div>
 
 </br>
 
